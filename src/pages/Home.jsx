@@ -22,7 +22,9 @@ function Home() {
           <p>Quests Completed: {user.completedQuests.length}</p>
         </div>
         
-        <Link to="/quests" className="btn">View Daily Quests</Link>
+        <div className="button-container" style={{ marginTop: '20px', textAlign: 'center' }}>
+          <Link to="/quests" className="btn">View Daily Quests</Link>
+        </div>
       </div>
       
       <div className="system-box motivation-box">

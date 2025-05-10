@@ -23,7 +23,9 @@ function Header() {
         <h1 className="system-title">{getPageTitle()}</h1>
         <div className="header-user-info">
           <div className="level-display">
-            Level {user.level} <RankBadge rank={user.rank} /><span className="day-counter">Day {user.days}</span>
+            <span>Level {user.level}</span> 
+            <RankBadge rank={user.rank} />
+            <span className="day-counter">Day {user.days}</span>
           </div>
         </div>
       </div>
