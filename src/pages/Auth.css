@@ -4,20 +4,14 @@
   width: 100vw;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   overflow: hidden;
   z-index: 1;
 }
 
 .jinwoo-bg {
-  background: linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url('/src/assets/jinwoo.jpg') center/cover no-repeat;
-  animation: fadeBg 8s ease-in-out infinite alternate;
-}
-
-@keyframes fadeBg {
-  0% { filter: brightness(0.7) blur(0px); }
-  100% { filter: brightness(0.5) blur(2px); }
+  background: linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url('./src/assets/jinwoo.jpg') center/cover no-repeat;
 }
 
 /* Solo Leveling notification card style for auth-container */
@@ -36,6 +30,7 @@
   animation: cardPopIn 0.5s cubic-bezier(.68,-0.55,.27,1.55);
   position: relative;
   z-index: 2;
+  margin-left: 8vw;
 }
 
 @keyframes cardPopIn {
