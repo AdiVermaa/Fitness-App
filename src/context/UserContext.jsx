@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { calculateLevel, calculateRank } from '../utils/levelSystem';
 import { generateDailyQuests } from '../utils/questGenerator';
+import { auth } from '../utils/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const UserContext = createContext();
 
@@ -29,6 +31,9 @@ export const UserProvider = ({ children }) => {
     newRank: '' 
   });
 
+  const [firebaseUser, setFirebaseUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
   // Check if we need to generate new daily quests
   useEffect(() => {
     const now = new Date();
@@ -44,6 +49,14 @@ export const UserProvider = ({ children }) => {
       }));
     }
   }, [user.level, user.rank, user.lastQuestRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setFirebaseUser(user);
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Add XP and handle level ups
   const addXP = (amount) => {
@@ -156,7 +169,9 @@ export const UserProvider = ({ children }) => {
       showLevelUp,
       levelUpDetails,
       closeLevelUp,
-      generateNextDayQuests
+      generateNextDayQuests,
+      firebaseUser,
+      authLoading
     }}>
       {children}
     </UserContext.Provider>

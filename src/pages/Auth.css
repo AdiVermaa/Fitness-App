@@ -1,0 +1,252 @@
+/* src/pages/Auth.css */
+.auth-bg {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.jinwoo-bg {
+  background: linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url('/src/assets/jinwoo.jpg') center/cover no-repeat;
+  animation: fadeBg 8s ease-in-out infinite alternate;
+}
+
+@keyframes fadeBg {
+  0% { filter: brightness(0.7) blur(0px); }
+  100% { filter: brightness(0.5) blur(2px); }
+}
+
+/* Solo Leveling notification card style for auth-container */
+.auth-container {
+  background: rgba(13, 17, 34, 0.97);
+  border: 2.5px solid #0d6efd;
+  box-shadow: 0 0 24px 4px #0d6efd66, 0 2px 32px 0 #000b;
+  border-radius: 1.2rem;
+  padding: 2.5rem 2rem;
+  max-width: 350px;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Share Tech Mono', 'Consolas', 'Roboto Mono', monospace;
+  animation: cardPopIn 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes cardPopIn {
+  0% { transform: scale(0.95) translateY(30px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.auth-container h2 {
+  color: #6ec1ff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 8px #0d6efd99;
+  font-family: inherit;
+}
+
+.auth-container input {
+  background: #181e36;
+  border: 1.5px solid #0d6efd99;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  font-family: inherit;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.auth-container input:focus {
+  border: 1.5px solid #6ec1ff;
+  outline: none;
+  box-shadow: 0 0 8px #0d6efd55;
+}
+
+.auth-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-container button {
+  background: linear-gradient(90deg, #0d6efd 60%, #6ec1ff 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  font-family: inherit;
+  box-shadow: 0 0 8px #0d6efd55;
+  transition: background 0.2s, box-shadow 0.2s;
+  align-self: center;
+}
+.auth-container button:hover {
+  background: linear-gradient(90deg, #6ec1ff 0%, #0d6efd 100%);
+  box-shadow: 0 0 16px #0d6efd99;
+}
+
+.auth-error {
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: inherit;
+}
+
+.auth-container p, .auth-container a {
+  color: #b3d8ff;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.auth-container a {
+  color: #6ec1ff;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .auth-container {
+    padding: 1.5rem 0.5rem;
+    max-width: 95vw;
+  }
+}
+
+.auth-bg-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Add to Auth.css for Google button and divider styling */
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #fff;
+  color: #222;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.google-btn:hover {
+  background: #f5f5f5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.google-icon {
+  width: 22px;
+  height: 22px;
+}
+.divider {
+  width: 100%;
+  text-align: center;
+  color: #aaa;
+  margin: 0.7rem 0 1rem 0;
+  position: relative;
+}
+.divider:before, .divider:after {
+  content: '';
+  display: inline-block;
+  width: 40%;
+  height: 1px;
+  background: #ddd;
+  vertical-align: middle;
+  margin: 0 0.5rem;
+}
+
+/* System modal styles for Solo Leveling style */
+.system-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.system-modal-card {
+  background: rgba(13, 17, 34, 0.97);
+  border: 2.5px solid #0d6efd;
+  box-shadow: 0 0 24px 4px #0d6efd66, 0 2px 32px 0 #000b;
+  border-radius: 1.2rem;
+  padding: 2rem 2.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+  font-family: 'Share Tech Mono', 'Consolas', 'Roboto Mono', monospace;
+  color: #b3d8ff;
+  text-align: center;
+  position: relative;
+  animation: cardPopIn 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+}
+.system-modal-title {
+  color: #6ec1ff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 8px #0d6efd99;
+}
+.system-modal-message {
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+.countdown-red {
+  color: #ff3b3b;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-shadow: 0 0 8px #ff3b3b99;
+}
+.system-modal-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.system-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  min-width: 320px;
+  max-width: 90vw;
+  background: rgba(13, 17, 34, 0.97);
+  border: 2.5px solid #0d6efd;
+  box-shadow: 0 0 24px 4px #0d6efd66, 0 2px 32px 0 #000b;
+  border-radius: 1.2rem;
+  padding: 2rem 2.5rem;
+  font-family: 'Share Tech Mono', 'Consolas', 'Roboto Mono', monospace;
+  color: #b3d8ff;
+  text-align: center;
+  animation: cardPopIn 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.system-notification.info {
+  border-color: #0d6efd;
+  color: #6ec1ff;
+  text-shadow: 0 0 8px #0d6efd99;
+}
+.system-notification.error {
+  border-color: #ff3b3b;
+  color: #ff3b3b;
+  text-shadow: 0 0 8px #ff3b3b99;
+} 
