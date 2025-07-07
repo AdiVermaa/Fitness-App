@@ -2,8 +2,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Rajdhani', sans-serif;
-  background-color: #0a0a0a;
   color: #e0e0e0;
+  background-image: url('/src/assets/main_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 * {
@@ -128,14 +131,12 @@ body {
   background-color: rgba(20, 20, 30, 0.9);
   border: 1px solid #6200ff;
   border-radius: 8px;
-  box-shadow: 0 0 15px rgba(137, 0, 250, 0.5);
   padding: 20px;
   margin: 15px 0;
   position: relative;
 }
 
 .system-box:hover {
-  box-shadow: 0 0 20px rgba(137, 0, 250, 0.7);
   transition: box-shadow 0.3s ease;
 }
 
@@ -144,6 +145,9 @@ body {
   font-weight: 700;
   margin-bottom: 15px;
   text-shadow: 0 0 5px rgba(137, 0, 250, 0.5);
+  border-left: 5px solid #6ec1ff;
+  padding-left: 12px;
+  margin-bottom: 18px;
 }
 
 .glow-text {
@@ -170,6 +174,23 @@ body {
 .quest-btn {
   position: relative;
   overflow: hidden;
+  background: linear-gradient(90deg, #0d6efd 60%, #6ec1ff 100%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  font-family: inherit;
+  box-shadow: 0 0 8px #0d6efd55;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  align-self: center;
+}
+
+.quest-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 16px #0d6efd99;
 }
 
 .quest-btn::after {
@@ -189,33 +210,36 @@ body {
 
 /* Quest item styling */
 .quest-item {
-  background: rgba(25, 25, 35, 0.8);
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 10px;
-  transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(25,25,35,0.85) 60%, rgba(98,0,255,0.10));
+  border: 1.5px solid #444;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.3s, transform 0.2s;
   position: relative;
   overflow: hidden;
   animation: fadeIn 0.5s ease;
 }
 
 .quest-item:hover {
-  border-color: #6200ff;
-  box-shadow: 0 0 10px rgba(137, 0, 250, 0.3);
-  transform: translateY(-2px);
+  border-color: #c18fff;
+  box-shadow: 0 6px 32px 0 #6ec1ff44, 0 2px 12px #0002;
+  transform: translateY(-4px) scale(1.025);
 }
 
-.quest-item.completing{
-  animation: pulse 1s infinite;
+.quest-item.completing {
+  background: linear-gradient(90deg, #fffbe6 0%, #ffe7ba 100%);
   border-color: #ffd700;
+  box-shadow: 0 0 32px #ffd70099;
 }
+
 .quest-item.completed {
   border-color: #00ff88;
   opacity: 0;
   animation: completedFadeOut 1.5s ease forwards;
   pointer-events: none;
 }
+
 .completing-animation {
   position: absolute;
   top: 0;
@@ -236,6 +260,7 @@ body {
   animation: pulse 1s infinite;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
 }
+
 .celebration-active {
   animation: celebrationGlow 3s infinite;
 }
@@ -313,13 +338,14 @@ body {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #4b00a8, #6200ff);
+  background: linear-gradient(90deg, #4b00a8 0%, #6ec1ff 100%);
   border-radius: 10px;
   transition: width 0.5s ease;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 0 12px #6ec1ff55;
 }
 
 .progress-text {
@@ -333,6 +359,7 @@ body {
   text-align: center;
   font-weight: 600;
   color: #c18fff;
+  margin: 18px 0 18px 0;
 }
 
 .all-quests-complete {
@@ -659,3 +686,11 @@ body {
 .celebration-particles .particle:nth-child(18) { --random-x: 10px; left: 95%; animation-delay: 0.8s; }
 .celebration-particles .particle:nth-child(19) { --random-x: -25px; left: 5%; animation-delay: 0.3s; }
 .celebration-particles .particle:nth-child(20) { --random-x: 20px; left: 38%; animation-delay: 0.5s; }
+
+.empty-quests-illustration {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+}

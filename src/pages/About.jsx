@@ -1,10 +1,11 @@
 import React from 'react';
 import RankBadge from '../components/RankBadge';
+import mainBg from '../assets/main_bg.jpg';
 
 
 function About() {
   return (
-    <div className="about-page">
+    <div className="about-page" style={{ minHeight: '100vh', backgroundImage: `url(${mainBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <div className="system-box">
         <h2 className="system-title">About The System</h2>
         

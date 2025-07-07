@@ -9,13 +9,11 @@ function QuestItem({ quest }) {
   const handleComplete = () => {
     if (!quest.completed) {
       setIsCompleting(true);
-      // Animate before completing
       setTimeout(() => {
         completeQuest(quest.id);
-        // Fade out after completing
         setTimeout(() => {
           setIsVisible(false);
-        }, 800); // Slightly longer fade time for better visibility of completion
+        }, 800);
       }, 1000);
     }
   };
@@ -33,7 +31,8 @@ function QuestItem({ quest }) {
   if (!isVisible) return null;
   
   return (
-    <div className={`quest-item ${quest.completed ? 'completed' : ''} ${isCompleting ? 'completing' : ''}`}>
+    <div className={`quest-item ${quest.completed ? 'completed' : ''} ${isCompleting ? 'completing' : ''}`}
+      style={{ position: 'relative', transition: 'box-shadow 0.3s', boxShadow: isCompleting ? '0 0 24px #ffd70099' : '0 2px 12px #0002' }}>
       <div className="quest-header">
         <h3 className="quest-title">{quest.title}</h3>
         <span className="quest-xp">+{quest.xp} XP</span>
@@ -45,9 +44,10 @@ function QuestItem({ quest }) {
         </div>
       )}
       <button 
-        className="btn quest-btn" 
+        className="btn quest-btn"
         onClick={handleComplete}
         disabled={quest.completed || isCompleting}
+        title={!quest.completed && !isCompleting ? 'You can do it! Complete this quest!' : ''}
       >
         {quest.completed ? 'Completed' : isCompleting ? 'Completing...' : 'Complete Quest'}
       </button>

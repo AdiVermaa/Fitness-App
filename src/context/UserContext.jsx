@@ -138,19 +138,21 @@ export const UserProvider = ({ children }) => {
     }));
   };
 
-  // Reset progress
-  const resetProgress = () => {
-    if (window.confirm('Are you sure you want to reset all progress? This cannot be undone!')) {
-      const newUser = {
-        xp: 0,
-        level: 1,
-        rank: 'E',
-        days: 1,
-        completedQuests: [],
-        lastQuestRefresh: new Date().toISOString()
-      };
-      setUser(newUser);
-      setQuests(generateDailyQuests(1, 'E'));
+  // Change resetProgress to accept a callback for confirmation
+  const resetProgress = (confirmCallback) => {
+    if (typeof confirmCallback === 'function') {
+      confirmCallback(() => {
+        const newUser = {
+          xp: 0,
+          level: 1,
+          rank: 'E',
+          days: 1,
+          completedQuests: [],
+          lastQuestRefresh: new Date().toISOString()
+        };
+        setUser(newUser);
+        setQuests(generateDailyQuests(1, 'E'));
+      });
     }
   };
 

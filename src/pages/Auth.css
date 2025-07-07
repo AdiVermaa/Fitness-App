@@ -244,4 +244,77 @@
   border-color: #ff3b3b;
   color: #ff3b3b;
   text-shadow: 0 0 8px #ff3b3b99;
+}
+
+.reset-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 59, 59, 0.08);
+  border: 2px solid #ff3b3b;
+  border-radius: 1rem;
+  box-shadow: 0 0 16px #ff3b3b33;
+}
+
+.danger-zone-title {
+  color: #ff3b3b;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 8px #ff3b3b55;
+}
+
+.danger-btn {
+  margin-bottom: 0.5rem;
+}
+
+.user-info-section {
+  margin: 2rem 0 2.5rem 0;
+  padding: 1.2rem 1.5rem;
+  background: rgba(13, 17, 34, 0.92);
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px #0d6efd22;
+}
+
+.user-info-display > div {
+  margin-bottom: 0.5rem;
+}
+
+.user-info-display .btn {
+  margin-top: 0.7rem;
+}
+
+.edit-userinfo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  background: rgba(20, 24, 40, 0.98);
+  padding: 1.2rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px #0d6efd22;
+}
+
+.edit-userinfo-form input {
+  background: #181e36;
+  border: 1.5px solid #0d6efd99;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  font-family: inherit;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.edit-userinfo-form input:focus {
+  border: 1.5px solid #6ec1ff;
+  outline: none;
+  box-shadow: 0 0 8px #0d6efd55;
+}
+
+.stat-label, .stat-value {
+  font-weight: bold;
 } 

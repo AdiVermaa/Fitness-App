@@ -6,6 +6,8 @@ import { auth, db } from '../utils/firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { EmailAuthProvider, reauthenticateWithCredential, GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
+import mainBg from '../assets/main_bg.jpg';
 
 function Profile() {
   const { user, resetProgress, firebaseUser } = useUser();
@@ -18,6 +20,11 @@ function Profile() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deletePhrase, setDeletePhrase] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [showSignOutWarning, setShowSignOutWarning] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [reauthError, setReauthError] = useState('');
+  const [errorNotification, setErrorNotification] = useState('');
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -34,8 +41,16 @@ function Profile() {
   }, [firebaseUser]);
 
   const handleSignOut = async () => {
+    setShowSignOutWarning(true);
+  };
+
+  const confirmSignOut = async () => {
     await signOut(auth);
     navigate('/login');
+  };
+
+  const cancelSignOut = () => {
+    setShowSignOutWarning(false);
   };
 
   const handleEdit = () => {
@@ -65,16 +80,48 @@ function Profile() {
     e.preventDefault();
     if (!firebaseUser) return;
     setDeleting(true);
+    setReauthError('');
     try {
+      // Determine provider
+      const providerId = firebaseUser.providerData[0]?.providerId;
+      if (providerId === 'password') {
+        if (!deletePassword) {
+          setReauthError('Please enter your password to confirm.');
+          setDeleting(false);
+          return;
+        }
+        const credential = EmailAuthProvider.credential(firebaseUser.email, deletePassword);
+        await reauthenticateWithCredential(firebaseUser, credential);
+      } else if (providerId === 'google.com') {
+        const provider = new GoogleAuthProvider();
+        await reauthenticateWithPopup(firebaseUser, provider);
+      }
       await deleteDoc(doc(db, 'userInfo', firebaseUser.uid));
       await firebaseUser.delete();
       await signOut(auth);
       navigate('/login');
     } catch (err) {
-      alert('Error deleting account: ' + err.message);
+      setReauthError(err.message);
+      setErrorNotification(err.message);
     }
     setDeleting(false);
     setShowDeleteConfirm(false);
+    setDeletePassword('');
+  };
+
+  const handleResetProgress = () => {
+    setShowResetConfirm(true);
+  };
+
+  const confirmResetProgress = () => {
+    resetProgress((doReset) => {
+      doReset();
+      setShowResetConfirm(false);
+    });
+  };
+
+  const cancelResetProgress = () => {
+    setShowResetConfirm(false);
   };
 
   // Format date
@@ -102,11 +149,25 @@ function Profile() {
   const questsByDate = groupQuestsByDate();
 
   return (
-    <div className="profile-page">
+    <div className="profile-page" style={{ minHeight: '100vh', backgroundImage: `url(${mainBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <div className="system-box">
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button className="btn" onClick={handleSignOut}>Sign Out</button>
         </div>
+        {showSignOutWarning && (
+          <div className="system-modal-overlay">
+            <div className="system-modal-card">
+              <div className="system-modal-title">System Warning</div>
+              <div className="system-modal-message">
+                Are you sure you want to sign out?
+              </div>
+              <div className="system-modal-actions">
+                <button className="btn danger-btn" onClick={confirmSignOut}>Sign Out</button>
+                <button className="btn" onClick={cancelSignOut}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
         <h2 className="system-title">{userInfo ? `${userInfo.name}'s Profile` : 'Profile'}</h2>
         <div className="profile-status">
           <div className="profile-header">
@@ -179,34 +240,75 @@ function Profile() {
           )}
         </div>
         <div className="reset-section">
-          <h3 className="system-title">Danger Zone</h3>
+          <h3 className="danger-zone-title">Danger Zone</h3>
           <p>Reset all progress and start over as E-Rank Hunter.</p>
-          <button className="btn danger-btn" onClick={resetProgress}>
+          <button className="btn danger-btn" onClick={handleResetProgress}>
             Reset Progress
           </button>
-          <button className="btn danger-btn" onClick={handleDeleteAccount} style={{marginTop: '1rem'}}>
+          <button className="btn danger-btn" onClick={handleDeleteAccount}>
             Delete Account
           </button>
-          {showDeleteConfirm && (
-            <form className="delete-account-form" onSubmit={handleDeleteConfirm} style={{marginTop: '1.5rem', background: 'rgba(30,30,40,0.95)', padding: '1.2rem', borderRadius: '1rem', border: '2px solid #ff3b3b', boxShadow: '0 0 12px #ff3b3b55'}}>
-              <div style={{color:'#ff3b3b', fontWeight:700, marginBottom:'0.7rem'}}>This action is irreversible. Type <span style={{fontFamily:'monospace'}}>yes delete my account</span> to confirm.</div>
-              <input
-                type="text"
-                value={deletePhrase}
-                onChange={e => setDeletePhrase(e.target.value)}
-                placeholder="Type the phrase exactly"
-                style={{width:'100%',padding:'0.6rem',borderRadius:'0.5rem',border:'1.5px solid #ff3b3b',marginBottom:'0.7rem',fontFamily:'inherit'}}
-                autoFocus
-              />
-              <div style={{display:'flex',gap:'1rem',justifyContent:'center'}}>
+        </div>
+        {showDeleteConfirm && (
+          <div className="system-modal-overlay">
+            <form className="system-modal-card delete-account-form" onSubmit={handleDeleteConfirm} style={{maxWidth: 400, margin: '0 auto'}}>
+              <div className="system-modal-title" style={{color:'#ff3b3b'}}>Delete Account</div>
+              <div className="system-modal-message" style={{marginBottom:'1.2rem'}}>
+                <div style={{fontWeight:700, marginBottom:'0.7rem'}}>This action is <span style={{color:'#ff3b3b'}}>irreversible</span>.<br/>Type <span style={{fontFamily:'monospace'}}>yes delete my account</span> to confirm.</div>
+                <input
+                  type="text"
+                  value={deletePhrase}
+                  onChange={e => setDeletePhrase(e.target.value)}
+                  placeholder="Type the phrase exactly"
+                  style={{width:'100%',padding:'0.6rem',borderRadius:'0.5rem',border:'1.5px solid #ff3b3b',marginBottom:'0.7rem',fontFamily:'inherit'}}
+                  autoFocus
+                />
+                {/* Password input for email/password users */}
+                {firebaseUser?.providerData[0]?.providerId === 'password' && (
+                  <input
+                    type="password"
+                    value={deletePassword}
+                    onChange={e => setDeletePassword(e.target.value)}
+                    placeholder="Enter your password to confirm"
+                    style={{width:'100%',padding:'0.6rem',borderRadius:'0.5rem',border:'1.5px solid #ff3b3b',marginBottom:'0.7rem',fontFamily:'inherit'}}
+                  />
+                )}
+                {reauthError && <div style={{color:'#ff6b6b', marginBottom:'0.7rem'}}>{reauthError}</div>}
+              </div>
+              <div className="system-modal-actions">
                 <button className="btn danger-btn" type="submit" disabled={deletePhrase !== 'yes delete my account' || deleting}>
                   {deleting ? 'Deleting...' : 'Delete'}
                 </button>
                 <button className="btn" type="button" onClick={()=>setShowDeleteConfirm(false)} disabled={deleting}>Cancel</button>
               </div>
             </form>
-          )}
-        </div>
+          </div>
+        )}
+        {showResetConfirm && (
+          <div className="system-modal-overlay">
+            <div className="system-modal-card" style={{borderColor:'#ff3b3b'}}>
+              <div className="system-modal-title" style={{color:'#ff3b3b'}}>Warning</div>
+              <div className="system-modal-message" style={{color:'#ff3b3b', marginBottom:'1.2rem'}}>
+                Are you sure you want to reset all progress? This cannot be undone!
+              </div>
+              <div className="system-modal-actions">
+                <button className="btn danger-btn" onClick={confirmResetProgress}>Reset</button>
+                <button className="btn" onClick={cancelResetProgress}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+        {errorNotification && (
+          <div className="system-modal-overlay">
+            <div className="system-modal-card" style={{borderColor:'#ff3b3b'}}>
+              <div className="system-modal-title" style={{color:'#ff3b3b'}}>Warning</div>
+              <div className="system-modal-message" style={{color:'#ff3b3b', marginBottom:'1.2rem'}}>{errorNotification}</div>
+              <div className="system-modal-actions">
+                <button className="btn" onClick={()=>setErrorNotification('')}>Close</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

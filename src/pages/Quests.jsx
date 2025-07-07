@@ -4,11 +4,16 @@ import QuestItem from '../components/QuestItem';
 import XPBar from '../components/XPBar';
 import LevelUpModal from '../components/LevelUpModal';
 import SystemNotification from '../components/SystemNotification';
+import { db } from '../utils/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import mainBg from '../assets/main_bg.jpg';
 
 function Quests() {
-  const { quests, user, generateNextDayQuests } = useUser();
+  const { quests, user, generateNextDayQuests, firebaseUser } = useUser();
   const [showCompletionEffect, setShowCompletionEffect] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   // Calculate completion percentage
   const completedCount = quests.filter(q => q.completed).length;
@@ -27,6 +32,19 @@ function Quests() {
     }
   }, [allCompleted]);
 
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (!firebaseUser) return;
+      setLoading(true);
+      const docSnap = await getDoc(doc(db, 'userInfo', firebaseUser.uid));
+      if (docSnap.exists()) {
+        setUserInfo(docSnap.data());
+      }
+      setLoading(false);
+    };
+    fetchUserInfo();
+  }, [firebaseUser]);
+
   // Handle next day quests generation
   const handleNextDay = () => {
     generateNextDayQuests();
@@ -40,7 +58,7 @@ function Quests() {
   };
   
   return (
-    <div className="quests-page">
+    <div className="quests-page" style={{ minHeight: '100vh', backgroundImage: `url(${mainBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <LevelUpModal />
       
       {showNotification && (
@@ -51,7 +69,7 @@ function Quests() {
         />
       )}
       
-      <div className={`system-box ${showCompletionEffect ? 'celebration-active' : ''}`}>
+      <div className={`system-box ${showCompletionEffect ? 'celebration-active' : ''}`} style={{ marginBottom: '2.5rem' }}>
         <h2 className="system-title">Daily Quests</h2>
         <XPBar />
         
@@ -70,13 +88,13 @@ function Quests() {
         <div className="quests-list">
           {quests.filter(quest => !quest.completed).length > 0 ? (
             quests.map(quest => (
-              <QuestItem key={quest.id} quest={quest} />
+              <QuestItem key={quest.id} quest={{...quest, title: `✨ ${quest.title}`}} />
             ))
           ) : allCompleted ? (
             <div className="all-quests-complete">
               <div className="completion-message">
                 <h3 className="glow-text">All Daily Quests Completed!</h3>
-                <p className="system-message">"Well done, Hunter. You've grown stronger today."</p>
+                <p className="system-message">"Well done, {userInfo ? userInfo.name : 'Hunter'}. You've grown stronger today."</p>
                 <div className="completion-badge">
                   <span className="badge-icon">★</span>
                 </div>
@@ -92,7 +110,10 @@ function Quests() {
               </div>
             </div>
           ) : (
-            <p className="no-quests">No active quests. Return tomorrow for new challenges.</p>
+            <div style={{textAlign:'center',marginTop:'2rem'}}>
+              <div className="empty-quests-illustration">✨</div>
+              <p className="no-quests">No active quests. Return tomorrow for new challenges.</p>
+            </div>
           )}
         </div>
       </div>

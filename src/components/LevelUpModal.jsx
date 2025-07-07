@@ -1,9 +1,23 @@
 import React, { useEffect } from 'react';
 import { useUser } from '../context/UserContext';
 import RankBadge from './RankBadge';
+import { db } from '../utils/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 function LevelUpModal() {
-  const { showLevelUp, levelUpDetails, closeLevelUp } = useUser();
+  const { showLevelUp, levelUpDetails, closeLevelUp, firebaseUser } = useUser();
+  const [userInfo, setUserInfo] = React.useState(null);
+  
+  React.useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (!firebaseUser) return;
+      const docSnap = await getDoc(doc(db, 'userInfo', firebaseUser.uid));
+      if (docSnap.exists()) {
+        setUserInfo(docSnap.data());
+      }
+    };
+    fetchUserInfo();
+  }, [firebaseUser]);
   
   useEffect(() => {
     if (showLevelUp) {
@@ -41,7 +55,7 @@ function LevelUpModal() {
           <p className="day-display">Day {levelUpDetails.day}</p>
           
           <p className="system-message">
-            "Your abilities have grown stronger. Continue to rise, Hunter."
+            "Your abilities have grown stronger. Continue to rise, {userInfo ? userInfo.name : 'Hunter'}."
           </p>
         </div>
         <button className="btn" onClick={closeLevelUp}>Continue</button>
