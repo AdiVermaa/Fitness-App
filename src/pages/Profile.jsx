@@ -254,16 +254,26 @@ function Profile() {
             <form className="system-modal-card delete-account-form" onSubmit={handleDeleteConfirm} style={{maxWidth: 400, margin: '0 auto'}}>
               <div className="system-modal-title" style={{color:'#ff3b3b'}}>Delete Account</div>
               <div className="system-modal-message" style={{marginBottom:'1.2rem'}}>
-                <div style={{fontWeight:700, marginBottom:'0.7rem'}}>This action is <span style={{color:'#ff3b3b'}}>irreversible</span>.<br/>Type <span style={{fontFamily:'monospace'}}>yes delete my account</span> to confirm.</div>
+                <div style={{fontWeight:700, marginBottom:'0.7rem'}}>
+                  This action is <span style={{color:'#ff3b3b'}}>irreversible</span>.<br/>
+                  Type <span style={{fontFamily:'monospace', color:'#ff3b3b'}}>yes delete my account</span> to confirm.
+                </div>
                 <input
                   type="text"
                   value={deletePhrase}
                   onChange={e => setDeletePhrase(e.target.value)}
                   placeholder="Type the phrase exactly"
-                  style={{width:'100%',padding:'0.6rem',borderRadius:'0.5rem',border:'1.5px solid #ff3b3b',marginBottom:'0.7rem',fontFamily:'inherit'}}
+                  style={{
+                    width: '100%',
+                    padding: '0.6rem',
+                    borderRadius: '0.5rem',
+                    border: '1.5px solid #ff3b3b',
+                    marginBottom: '0.7rem',
+                    fontFamily: 'inherit',
+                    color: deletePhrase.toLowerCase().includes('yes delete my account') ? '#ff3b3b' : undefined
+                  }}
                   autoFocus
                 />
-                {/* Password input for email/password users */}
                 {firebaseUser?.providerData[0]?.providerId === 'password' && (
                   <input
                     type="password"

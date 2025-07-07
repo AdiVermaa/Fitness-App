@@ -11,7 +11,7 @@
 }
 
 .jinwoo-bg {
-  background: linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url('./src/assets/jinwoo.jpg') center/cover no-repeat;
+  background: linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url('../assets/jinwoo.jpg') center/cover no-repeat;
 }
 
 /* Solo Leveling notification card style for auth-container */
