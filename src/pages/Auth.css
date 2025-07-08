@@ -125,6 +125,11 @@
   pointer-events: none;
 }
 
+.auth-bg-img.fade {
+  opacity: 0 !important;
+  transition: opacity 0.6s;
+}
+
 /* Add to Auth.css for Google button and divider styling */
 .google-btn {
   width: 100%;
