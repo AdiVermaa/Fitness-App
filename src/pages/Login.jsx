@@ -16,19 +16,28 @@ function Login() {
   const navigate = useNavigate();
 
   const images = [bg1, bg2, bg3, bg4, jinwoo];
-  const [bgIndex, setBgIndex] = useState(0);
-  const [fade, setFade] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(1);
+  const [isFading, setIsFading] = useState(false);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setFade(true);
+      setNextIndex((currentIndex + 1) % images.length);
+      setIsFading(true);
       setTimeout(() => {
-        setBgIndex((prev) => (prev + 1) % images.length);
-        setFade(false);
-      }, 600); // fade duration
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+        setIsFading(false);
+      }, 1200); // fade duration
     }, 4000);
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [currentIndex, images.length]);
+
+  React.useEffect(() => {
+    document.body.classList.add('auth-bg-active');
+    return () => {
+      document.body.classList.remove('auth-bg-active');
+    };
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -68,12 +77,34 @@ function Login() {
 
   return (
     <div className="auth-bg">
+      {/* Current image (fades out) */}
       <div
-        className={`auth-bg-img${fade ? ' fade' : ''}`}
+        className="auth-bg-img"
         style={{
-          background: `linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url(${images[bgIndex]}) center/cover no-repeat`,
-          transition: 'opacity 0.6s',
-          opacity: fade ? 0 : 1
+          background: `linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url(${images[currentIndex]}) center/cover no-repeat`,
+          zIndex: 0,
+          opacity: isFading ? 0 : 1,
+          transition: 'opacity 1.2s',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+        }}
+      />
+      {/* Next image (fades in) */}
+      <div
+        className="auth-bg-img"
+        style={{
+          background: `linear-gradient(rgba(20,20,30,0.7), rgba(20,20,30,0.7)), url(${images[nextIndex]}) center/cover no-repeat`,
+          zIndex: 1,
+          opacity: isFading ? 1 : 0,
+          transition: 'opacity 1.2s',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
         }}
       />
       <div className="auth-container">
